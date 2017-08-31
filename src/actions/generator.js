@@ -119,6 +119,7 @@ function createFullAPIActionFile(settings) {
 }
 function createFullAPIActionImportFile(settings) {
     const result =`
+    /* 加载${settings['name']} */
     LOAD_${settings['constant_name']}, 
     LOAD_${settings['constant_name']}_SUCCESS,
     LOAD_${settings['constant_name']}_ERROR,
@@ -139,7 +140,7 @@ function createAddActionFunction(settings) {
   const methodBase = createMiddleMethodBase(settings['method_base']);
 
   return `/**
- * 添加 ${settings.name} action
+ * 添加${settings.name} action
  */
 export function add${methodBase}(payload) {
   return {
@@ -170,7 +171,7 @@ function createUpdateActionFunction(settings) {
   const methodBase = createMiddleMethodBase(settings['method_base']);
 
   return `/**
- * 修改 ${settings.name} action
+ * 修改${settings.name} action
  */
 export function update${methodBase}(payload) {
   return {
@@ -201,7 +202,7 @@ function createDeleteActionFunction(settings) {
   const methodBase = createMiddleMethodBase(settings['method_base']);
 
   return `/**
- * 删除 ${settings.name} action
+ * 删除${settings.name} action
  */
 export function delete${methodBase}(payload) {
   return {
@@ -235,14 +236,17 @@ function createFullCRUDActionFile(settings) {
 }
 function createFullCRUDActionImportFile(settings) {
   return `
+    /* 添加${settings['name']} */
     ADD_${settings['constant_name']},
     ADD_${settings['constant_name']}_SUCCESS,
     ADD_${settings['constant_name']}_ERROR,
     
+    /* 修改${settings['name']} */
     UPDATE_${settings['constant_name']},
     UPDATE_${settings['constant_name']}_SUCCESS,
     UPDATE_${settings['constant_name']}_ERROR,
     
+    /* 删除${settings['name']} */
     DELETE_${settings['constant_name']},
     DELETE_${settings['constant_name']}_SUCCESS,
     DELETE_${settings['constant_name']}_ERROR,
@@ -268,6 +272,7 @@ export function ${settings.method}(payload) {
 
 function createSingleActionImport(settings) {
 return `
+    /* ${settings['name']} */
     ${settings['constant_name']},
     `;
 }

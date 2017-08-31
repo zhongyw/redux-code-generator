@@ -72,19 +72,29 @@ const apiReducerTypes = [
 ];
 
 const createAPIReducerFile = createFileFunctionTemplate(generators.createAPIReducer, apiReducerTypes);
+const createAPIReducerImportFile = createFileFunctionTemplate(generators.createFullAPIReducerImportFile, apiReducerTypes);
+/**
+ * CRUD operations
+ * @type {Array}
+ */
+const crudReducerTypes = [
+  'AddReducer',
+  'UpdateReducer',
+  'DeleteReducer'
+];
+const createCRUDReducerFile = createFileFunctionTemplate(generators.createFullCRUDReducerFile, crudReducerTypes, { reverse: true });
+const createCRUDReducerImportFile = createFileFunctionTemplate(generators.createFullCRUDReducerImportFile, crudReducerTypes, { reverse: true });
 
+const createSingleReducerFile = createFileFunctionTemplate(generators.createSingleReducer);
+const createSingleReducerImportFile = createFileFunctionTemplate(generators.createSingleReducerImport);
 
-
-function createCRUDReducerFile() {
-  console.log('TBA');
-}
-
-function createSingleReducerFile() {
-  console.log('TBA');
-}
 
 module.exports = {
+  writeRawText: writeRawText,
   createAPIReducerFile: createAPIReducerFile,
+  createAPIReducerImportFile: createAPIReducerImportFile,
   createCRUDReducerFile: createCRUDReducerFile,
-  createSingleReducerFile: createSingleReducerFile
+  createCRUDReducerImportFile: createCRUDReducerImportFile,
+  createSingleReducerFile: createSingleReducerFile,
+  createSingleReducerImportFile: createSingleReducerImportFile
 }
