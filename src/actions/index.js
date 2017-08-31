@@ -3,7 +3,6 @@ var writeFile = require('./writeFile');
 
 function actionsController(settings) {
   console.log('Writing Actions'.green);
-
   settings.actions.forEach(action => {
     try {
       switch (action.type) {

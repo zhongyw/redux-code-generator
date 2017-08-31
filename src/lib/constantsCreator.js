@@ -2,17 +2,17 @@ function readAction(action) {
   switch (action.type) {
     case 'api':
     return [
-      `${action.constant_name}_REQUEST`,
+      `LOAD_${action.constant_name}`,
       `${action.constant_name}_SUCCESS`,
-      `${action.constant_name}_FAILURE`
+      `${action.constant_name}_ERROR`
     ];
     case 'transaction':
     case 'crud':
-    return [
-      `ADD_${action.constant_name}`,
-      `UPDATE_${action.constant_name}`,
-      `DELETE_${action.constant_name}`,
-    ];
+      return [
+        `ADD_${action.constant_name}`,
+        `UPDATE_${action.constant_name}`,
+        `DELETE_${action.constant_name}`,
+      ];
     case 'single':
     case 'default':
     default:

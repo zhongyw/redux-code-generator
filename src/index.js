@@ -2,12 +2,14 @@
 
 var colors = require('colors');
 var actionsController = require('./actions/index');
+var reducerController = require('./reducer/index');
 var createConstants = require('./lib/constantsCreator');
 var figlet = require('figlet');
 var fs = require('fs');
 var loadYamlFile = require('./lib/yaml');
 var validator = require('./lib/validator');
 var writeConstants = require('./lib/writeConstants');
+var rimraf = require('rimraf');
 
 /**
  * Create initial splash page
@@ -48,7 +50,7 @@ function settingsController(settings) {
   actionsController(modifiedSettings);
 
   // Write reducers
-  // reducerController(modifiedSettings);
+  reducerController(modifiedSettings);
 
   // Write Constants
   writeConstants(modifiedSettings);
@@ -59,19 +61,26 @@ function settingsController(settings) {
  */
 function run() {
   createWelcomeSplash();
+  var dir = './dist';
+  rimraf(dir, ()=> {
 
-  // Yaml file found. Load file and load it
-  if (process.argv[2]) {
-    const yamlFile = process.argv[2];
-    const settings = loadYamlFile(yamlFile);
-    settingsController(settings);
-  } else {
-    // Yaml file not found. Exit application
-    console.log('\nPlease provide an file'.underline.red);
-    console.log('Proper format:');
-    console.log('reduxgen ./sample.yaml\n');
-    process.exit(1);
-  }
+      if (!fs.existsSync(dir)){
+          fs.mkdirSync(dir);
+      }
+      // Yaml file found. Load file and load it
+      if (process.argv[2]) {
+          const yamlFile = process.argv[2];
+          const settings = loadYamlFile(yamlFile);
+          settingsController(settings);
+      } else {
+          // Yaml file not found. Exit application
+          console.log('\nPlease provide an file'.underline.red);
+          console.log('Proper format:');
+          console.log('reduxgen ./sample.yaml\n');
+          process.exit(1);
+      }
+  });
+
 }
 
 run();

@@ -56,10 +56,10 @@ const apiActionTypes = [
   'RequestAction',
   'SuccessAction',
   'FailureAction',
-  'DispatcherFunction',
-  'FetchFunction'
+  // 'DispatcherFunction',
+  // 'FetchFunction'
 ];
-
+const createActionImport = createFileFunctionTemplate(generators.createActionImport, apiActionTypes);
 /**
  * Create or append an action file with API actions
  * @param  {[type]} settings   Action settings
@@ -92,6 +92,7 @@ const createCRUDActionFile = createFileFunctionTemplate(generators.createFullCRU
 const createSingleActionFile = createFileFunctionTemplate(generators.createSingleAction);
 
 module.exports = {
+  createActionImport: createActionImport,
   createAPIActionFile: createAPIActionFile,
   createCRUDActionFile: createCRUDActionFile,
   createSingleActionFile: createSingleActionFile

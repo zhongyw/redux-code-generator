@@ -34,7 +34,8 @@
     "figlet": "^1.1.2",
     "fs": "0.0.2",
     "js-yaml": "^3.6.1",
-    "pygments": "^0.2.0"
+    "pygments": "^0.2.0",
+    "rimraf": "^2.6.1"
   },
   "devDependencies": {
     "eslint": "^2.12.0",

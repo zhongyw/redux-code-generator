@@ -27,3 +27,4 @@ function createReducerFile(settings, outputFile) {
     }
   });
 }
+module.exports = createReducerFile;

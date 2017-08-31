@@ -4,27 +4,30 @@
  * @return {string}          generated api reducer
  */
 function createAPIReducer(settings) {
-  return `const initialState = {
+
+  return `
+import { LOAD_${settings['constant_name']}, ${settings['constant_name']}_SUCCESS, ${settings['constant_name']}_ERROR } from './contstants';
+const initialState = {
     data: [],
     error: '',
     requesting: false,
     requested: false
 };
 
-export function ${settings.name}(state = initialState, action) {
+export function ${settings.reducer}(state = initialState, action) {
   switch (action.type) {
-  case types.${settings['base_constant']}_REQUEST:
+  case ${settings['constant_name']}:
     return Object.assign({}, state, {
       requesting: true,
       requested: false
     });
-  case types.${settings['base_constant']}_SUCCESS:
+  case ${settings['constant_name']}_SUCCESS:
     return Object.assign({}, state, {
       requesting: false,
       requested: true,
       data: state.data.concat(action.data)
     });
-  case types.${settings['base_constant']}_FAILURE:
+  case ${settings['constant_name']}_FAILURE:
     return Object.assign({}, state, {
       requesting: false,
       requested: true,

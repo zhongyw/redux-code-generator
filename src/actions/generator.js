@@ -1,16 +1,29 @@
+
+function createActionImport(settings){
+  return `import {
+    LOAD_${settings['constant_name']}, 
+    LOAD_${settings['constant_name']}_SUCCESS,
+    LOAD_${settings['constant_name']}_ERROR,
+    ADD_${settings['constant_name']},
+    UPDATE_${settings['constant_name']},
+    DELETE_${settings['constant_name']}
+ } from './constants' 
+`;
+}
 /**
  * Create request function for an action
  * @param  {object} settings Action settings
  * @return {string}          Request function generated
  */
 function createRequestFunction(settings) {
+  const methodBase = createMiddleMethodBase(settings['method_base']);
   return `/**
- * Action generator for ${settings.name} request action
- * @return {object}         request action
+ * ${settings.name} action
  */
-export function ${settings['method_base']}RequestAction() {
+export function load${methodBase}(payload) {
   return {
-    type: types.${settings['constant_name']}_REQUEST
+    type: LOAD_${settings['constant_name']},
+    payload
   };
 }\n`;
 }
@@ -21,15 +34,12 @@ export function ${settings['method_base']}RequestAction() {
  * @return {string}          Success function generated
  */
 function createSuccessFunction(settings) {
-  return `/**
- * Action generator for ${settings.name} success action
- * @param  {object} data    API response
- * @return {object}         success action
- */
-export function ${settings['method_base']}SuccessAction(data) {
+  const methodBase = createMiddleMethodBase(settings['method_base']);
+  return `
+export function load${methodBase}Success(payload) {
   return {
-    type: types.${settings['constant_name']}_SUCCESS,
-    data: data
+    type: LOAD_${settings['constant_name']}_SUCCESS,
+    payload
   };
 }\n`;
 }
@@ -40,15 +50,12 @@ export function ${settings['method_base']}SuccessAction(data) {
  * @return {string}          Failure function generated
  */
 function createFailureFunction(settings) {
-  return `/**
- * Action generator for ${settings.name} failure action
- * @param  {string|object} error    error from API
- * @return {object}                 failure action
- */
-export function ${settings['method_base']}FailureAction(error) {
+  const methodBase = createMiddleMethodBase(settings['method_base']);
+  return `
+export function load${methodBase}Error(error) {
   return {
-    type: types.${settings['constant_name']}_FAILURE,
-    error: error
+    type: LOAD_${settings['constant_name']}_ERROR,
+    error
   };
 }\n`;
 }
@@ -102,11 +109,13 @@ function ${methodName}(args) {
  * @return {string}          file text as string
  */
 function createFullAPIActionFile(settings) {
-  return createRequestFunction(settings) + '\n' +
+  const result =
+    createRequestFunction(settings) + '\n' +
     createSuccessFunction(settings) + '\n' +
-    createFailureFunction(settings) + '\n' +
-    createActionDispatcherFunction(settings) + '\n' +
-    createApiFetchFunction(settings) + '\n';
+    createFailureFunction(settings) + '\n' ;
+    // createActionDispatcherFunction(settings) + '\n' +
+    // createApiFetchFunction(settings) + '\n';
+  return result;
 }
 
 function createMiddleMethodBase(base) {
@@ -122,14 +131,12 @@ function createAddActionFunction(settings) {
   const methodBase = createMiddleMethodBase(settings['method_base']);
 
   return `/**
- * Add ${settings.name} action
- * @param  {object} data  data to add for ${settings.name} state
- * @return {object}       action for adding ${settings.name}
+ * 添加 ${settings.name} action
  */
-export function add${methodBase}(data) {
+export function add${methodBase}(payload) {
   return {
-    type: types.ADD_${settings['constant_name']},
-    data: data
+    type: ADD_${settings['constant_name']},
+    payload
   };
 }\n`;
 }
@@ -143,16 +150,12 @@ function createUpdateActionFunction(settings) {
   const methodBase = createMiddleMethodBase(settings['method_base']);
 
   return `/**
- * Update ${settings.name} action
- * @param  {object} data    data to update for ${settings.name} state
- * @param  {number} index   position where ${settings.name} is in the state tree
- * @return {object}         action for updating ${settings.name}
+ * 修改 ${settings.name} action
  */
-export function update${methodBase}(data, index) {
+export function update${methodBase}(payload) {
   return {
-    type: types.UPDATE_${settings['constant_name']},
-    data: data,
-    index: index
+    type: UPDATE_${settings['constant_name']},
+    payload
   };
 }\n`;
 }
@@ -166,14 +169,12 @@ function createDeleteActionFunction(settings) {
   const methodBase = createMiddleMethodBase(settings['method_base']);
 
   return `/**
- * Delete ${settings.name} action
- * @param  {number} index   position where ${settings.name} is in the state tree
- * @return {object}         action for delete ${settings.name}
+ * 删除 ${settings.name} action
  */
-export function delete${methodBase}(data, index) {
+export function delete${methodBase}(payload) {
   return {
-    type: types.DELETE_${settings['constant_name']},
-    index: index
+    type: DELETE_${settings['constant_name']},
+    payload
   };
 }\n`;
 }
@@ -209,6 +210,7 @@ export function ${settings.method}(data) {
 }
 
 module.exports = {
+  createActionImport: createActionImport,
   createRequestFunction: createRequestFunction,
   createSuccessFunction: createSuccessFunction,
   createFailureFunction: createFailureFunction,
