@@ -1,6 +1,17 @@
 var fs = require('fs');
 var generators = require('./generator');
 
+function writeRawText(text, outputFile){
+    let writeStream = fs.createWriteStream(outputFile, { flags: 'a' });
+
+    try {
+        writeStream.write(text);
+    } catch (e) {
+        console.log('error', e);
+    }
+
+    writeStream.end();
+}
 function createFileFunctionTemplate(generator, actionTypes, options = {}) {
   return (settings, outputFile) => {
     // Create write stream that will create or append a file
@@ -67,6 +78,8 @@ const createActionImport = createFileFunctionTemplate(generators.createActionImp
  */
 const createAPIActionFile = createFileFunctionTemplate(generators.createFullAPIActionFile, apiActionTypes);
 
+const createAPIActionImportFile = createFileFunctionTemplate(generators.createFullAPIActionImportFile, apiActionTypes);
+
 /**
  * CRUD operations
  * @type {Array}
@@ -83,6 +96,7 @@ const crudActionTypes = [
  * @param  {[type]} outputFile File destination
  */
 const createCRUDActionFile = createFileFunctionTemplate(generators.createFullCRUDActionFile, crudActionTypes, { reverse: true });
+const createCRUDActionImportFile = createFileFunctionTemplate(generators.createFullCRUDActionImportFile, crudActionTypes, { reverse: true });
 
 /**
  * Create or append an action file with a single action
@@ -90,10 +104,18 @@ const createCRUDActionFile = createFileFunctionTemplate(generators.createFullCRU
  * @param  {[type]} outputFile File destination
  */
 const createSingleActionFile = createFileFunctionTemplate(generators.createSingleAction);
+const createSingleActionImportFile = createFileFunctionTemplate(generators.createSingleActionImport);
+
+const createRawTextFile = createFileFunctionTemplate(generators.createRawText)
 
 module.exports = {
+  writeRawText: writeRawText,
+  createRawTextFile: createRawTextFile,
   createActionImport: createActionImport,
   createAPIActionFile: createAPIActionFile,
+  createAPIActionImportFile: createAPIActionImportFile,
   createCRUDActionFile: createCRUDActionFile,
-  createSingleActionFile: createSingleActionFile
+  createCRUDActionImportFile: createCRUDActionImportFile,
+  createSingleActionFile: createSingleActionFile,
+  createSingleActionImportFile: createSingleActionImportFile
 };

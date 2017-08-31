@@ -24,6 +24,11 @@ actions:
     reducer: dict
     method_base: dict
     constant_name: DICT
+  - name: 打开添加字典对话框
+    type: single
+    reducer: toggleAddDictModal
+    method: toggleAddDictModal
+    constant_name: TOGGLE_ADD_DICT_MODAL
 
 reducer:
   - name: sampleOne

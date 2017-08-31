@@ -117,6 +117,14 @@ function createFullAPIActionFile(settings) {
     // createApiFetchFunction(settings) + '\n';
   return result;
 }
+function createFullAPIActionImportFile(settings) {
+    const result =`
+    LOAD_${settings['constant_name']}, 
+    LOAD_${settings['constant_name']}_SUCCESS,
+    LOAD_${settings['constant_name']}_ERROR,
+    `
+    return result;
+}
 
 function createMiddleMethodBase(base) {
   return base.slice(0, 1).toUpperCase() + base.slice(1);
@@ -138,6 +146,18 @@ export function add${methodBase}(payload) {
     type: ADD_${settings['constant_name']},
     payload
   };
+}\n
+export function add${methodBase}Success(payload) {
+  return {
+    type: ADD_${settings['constant_name']}_SUCCESS,
+    payload
+  };
+}\n
+export function add${methodBase}Error(error) {
+  return {
+    type: ADD_${settings['constant_name']}_ERROR,
+    error
+  };
 }\n`;
 }
 
@@ -156,6 +176,18 @@ export function update${methodBase}(payload) {
   return {
     type: UPDATE_${settings['constant_name']},
     payload
+  };
+}\n
+export function update${methodBase}Success(payload) {
+  return {
+    type: UPDATE_${settings['constant_name']}_SUCCESS,
+    payload
+  };
+}\n
+export function update${methodBase}Error(error) {
+  return {
+    type: UPDATE_${settings['constant_name']}_ERROR,
+    error
   };
 }\n`;
 }
@@ -176,6 +208,18 @@ export function delete${methodBase}(payload) {
     type: DELETE_${settings['constant_name']},
     payload
   };
+}\n
+export function delete${methodBase}Success(payload) {
+  return {
+    type: DELETE_${settings['constant_name']}_SUCCESS,
+    payload
+  };
+}\n
+export function delete${methodBase}Error(error) {
+  return {
+    type: DELETE_${settings['constant_name']}_ERROR,
+    error
+  };
 }\n`;
 }
 
@@ -189,6 +233,21 @@ function createFullCRUDActionFile(settings) {
     createUpdateActionFunction(settings) + '\n' +
     createDeleteActionFunction(settings) + '\n';
 }
+function createFullCRUDActionImportFile(settings) {
+  return `
+    ADD_${settings['constant_name']},
+    ADD_${settings['constant_name']}_SUCCESS,
+    ADD_${settings['constant_name']}_ERROR,
+    
+    UPDATE_${settings['constant_name']},
+    UPDATE_${settings['constant_name']}_SUCCESS,
+    UPDATE_${settings['constant_name']}_ERROR,
+    
+    DELETE_${settings['constant_name']},
+    DELETE_${settings['constant_name']}_SUCCESS,
+    DELETE_${settings['constant_name']}_ERROR,
+    `;
+}
 
 /**
  * Creates single action function as a string
@@ -197,19 +256,27 @@ function createFullCRUDActionFile(settings) {
  */
 function createSingleAction(settings) {
   return `/**
- * Action creator for ${settings.name}
- * @param  {object} data    Data for ${settings.name} action
- * @return {object}         action for ${settings.name}
+ *  ${settings.name} action
  */
-export function ${settings.method}(data) {
+export function ${settings.method}(payload) {
   return {
-    type: types.${settings.constant},
-    data: data
+    type: ${settings.constant_name},
+    payload
   };
 }\n`;
 }
 
+function createSingleActionImport(settings) {
+return `
+    ${settings['constant_name']},
+    `;
+}
+function createRawText(text){
+    return `${text}`
+}
+
 module.exports = {
+  createRawText: createRawText,
   createActionImport: createActionImport,
   createRequestFunction: createRequestFunction,
   createSuccessFunction: createSuccessFunction,
@@ -217,9 +284,12 @@ module.exports = {
   createActionDispatcherFunction: createActionDispatcherFunction,
   createApiFetchFunction: createApiFetchFunction,
   createFullAPIActionFile: createFullAPIActionFile,
+  createFullAPIActionImportFile: createFullAPIActionImportFile,
   createAddActionFunction: createAddActionFunction,
   createUpdateActionFunction: createUpdateActionFunction,
   createDeleteActionFunction: createDeleteActionFunction,
   createFullCRUDActionFile: createFullCRUDActionFile,
-  createSingleAction: createSingleAction
+  createFullCRUDActionImportFile: createFullCRUDActionImportFile,
+  createSingleAction: createSingleAction,
+  createSingleActionImport: createSingleActionImport
 };

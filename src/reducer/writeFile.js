@@ -1,6 +1,17 @@
 var fs = require('fs');
 var generators = require('./generator');
 
+function writeRawText(text, outputFile){
+    let writeStream = fs.createWriteStream(outputFile, { flags: 'a' });
+
+    try {
+        writeStream.write(text);
+    } catch (e) {
+        console.log('error', e);
+    }
+
+    writeStream.end();
+}
 function createFileFunctionTemplate(generator, actionTypes, options = {}) {
     return (settings, outputFile) => {
         // Create write stream that will create or append a file
@@ -56,11 +67,13 @@ const apiReducerTypes = [
   'RequestReducer',
   'SuccessReducer',
   'FailureReducer',
-  'DispatcherFunction',
-  'FetchFunction'
+  // 'DispatcherFunction',
+  // 'FetchFunction'
 ];
 
 const createAPIReducerFile = createFileFunctionTemplate(generators.createAPIReducer, apiReducerTypes);
+
+
 
 function createCRUDReducerFile() {
   console.log('TBA');
