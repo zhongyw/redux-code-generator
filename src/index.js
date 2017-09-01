@@ -3,6 +3,7 @@
 var colors = require('colors');
 var actionsController = require('./actions/index');
 var reducerController = require('./reducer/index');
+var sagasController = require('./sagas/index');
 var createConstants = require('./lib/constantsCreator');
 var figlet = require('figlet');
 var fs = require('fs');
@@ -51,6 +52,9 @@ function settingsController(settings) {
 
   // Write reducers
   reducerController(modifiedSettings);
+
+  // Write sagas
+  sagasController(modifiedSettings);
 
   // Write Constants
   writeConstants(modifiedSettings);

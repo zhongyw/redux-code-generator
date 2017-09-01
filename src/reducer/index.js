@@ -8,7 +8,8 @@ function createReducerFile(settings, outputFile) {
   settings.actions.forEach(action => {
       try {
           switch (action.type) {
-              case 'api':
+              case 'loadList':
+              case 'loadItem':
                   writeFile.createAPIReducerImportFile(action, settings.output['reducer_file']);
                   return;
               case 'transreducer':
@@ -43,7 +44,8 @@ export function reducer(state = initialState, action) {
   settings.actions.forEach(action => {
     try {
       switch (action.type) {
-      case 'api':
+      case 'loadList':
+      case 'loadItem':
         writeFile.createAPIReducerFile(action, settings.output['reducer_file']);
         return;
       case 'transaction':

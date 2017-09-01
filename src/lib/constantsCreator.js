@@ -1,6 +1,7 @@
 function readAction(action) {
   switch (action.type) {
-    case 'api':
+  case 'loadList':
+  case 'loadItem':
     return [`\n/* 加载${action.name} */`,
       `export const LOAD_${action.constant_name}='LOAD_${action.constant_name}';`,
       `export const LOAD_${action.constant_name}_SUCCESS='LOAD_${action.constant_name}_SUCCESS';`,

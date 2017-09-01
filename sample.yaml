@@ -1,46 +1,32 @@
 output:
-  action_file: ./dist/sample_actions.js
-  reducer_file: ./dist/sample_reducer.js
-  constants_file: ./dist/sample_constants.js
+  action_file: ./dist/actions.js
+  reducer_file: ./dist/reducer.js
+  sagas_file: ./dist/sagas.js
+  constants_file: ./dist/constants.js
 actions:
+  # 获取列表
   - name: 字典列表
-    type: api
+    type: loadList
     reducer: dictList
     method_base: dictList
     constant_name: DICT_LIST
-    grouped_method: getSampleOneData
-    fetch_api_method: fetchSamp
-    api_method: getSampleOne
+  # 获取单条记录
   - name: 字典
-    type: api
+    type: loadItem
     reducer: dict
     method_base: dict
     constant_name: DICT
-    grouped_method: getSampleOneData
-    fetch_api_method: fetchSamp
-    api_method: getSampleOne
+  # 添加、修改、删除
   - name: 字典
     type: crud
     reducer: dict
     method_base: dict
     constant_name: DICT
+  # 单个action
   - name: 打开添加字典对话框
     type: single
     reducer: toggleAddDictModal
-    method: toggleAddDictModal
+    method_base: toggleAddDictModal
     constant_name: TOGGLE_ADD_DICT_MODAL
 
-reducer:
-  - name: sampleOne
 
-    constant_name: SAMPLE_ONE
-    state_type: api
-  - name: sampleTwo
-    constant_name: SAMPLE_ONE
-    state_type: transaction
-  - name: sampleThree
-    constant_name: SAMPLE_ONE
-    state_type: custom
-    custom_state:
-      - data:
-        type: array
