@@ -6,26 +6,22 @@ output:
 actions:
   # 获取列表
   - name: 字典列表
-    type: loadList
-    reducer: dictList
+    type: api
     method_base: dictList
     constant_name: DICT_LIST
   # 获取单条记录
   - name: 字典
-    type: loadItem
-    reducer: dict
+    type: api
     method_base: dict
     constant_name: DICT
   # 添加、修改、删除
   - name: 字典
     type: crud
-    reducer: dict
     method_base: dict
     constant_name: DICT
   # 单个action
   - name: 打开添加字典对话框
     type: single
-    reducer: toggleAddDictModal
     method_base: toggleAddDictModal
     constant_name: TOGGLE_ADD_DICT_MODAL
 

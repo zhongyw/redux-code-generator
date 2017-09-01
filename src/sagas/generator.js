@@ -6,7 +6,7 @@
 function createAPISaga(settings) {
   const methodBase = createMiddleMethodBase(settings['method_base']);
   return `\n/**
- * ${settings.name} action
+ * ${settings.name} saga
  */
 export function load${methodBase}Data(action) {
   try {
@@ -35,7 +35,7 @@ export function* watchLoad${methodBase}() {
 function createRequestFunction(settings) {
     const methodBase = createMiddleMethodBase(settings['method_base']);
     return `/**
- * ${settings.name} action
+ * ${settings.name} saga
  */
 export function load${methodBase}(payload) {
   return {
@@ -95,7 +95,7 @@ function createMiddleMethodBase(base) {
 }
 function createFullAPISagaImportConstantsFile(settings) {
     const result =`
-    /* ${settings['name']} */
+    /* 加载${settings['name']} */
     LOAD_${settings['constant_name']}, 
     `
     return result;
@@ -104,7 +104,7 @@ function createFullAPISagaImportConstantsFile(settings) {
 function createFullAPISagaImportActionsFile(settings) {
     const method_base = createMiddleMethodBase(settings['method_base']);
     const result =`
-    /* 加载${settings['name']} action*/
+    /* 加载${settings['name']} saga*/
     load${method_base},
     load${method_base}Success,
     load${method_base}Error,
@@ -288,7 +288,7 @@ function createSingleSagaConstantsImport(settings) {
 
 function createSingleSagaActionsImport(settings) {
     return `
-    /* ${settings['name']} action*/
+    /* ${settings['name']} saga*/
     ${settings['method_base']},
     `;
 }

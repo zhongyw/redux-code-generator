@@ -5,7 +5,7 @@
  */
 function createAPIReducer(settings) {
 
-  return `    /**
+  return `  /**
     * 加载${settings.name} reducer
     */
     case LOAD_${settings['constant_name']}:
@@ -189,7 +189,8 @@ function createSingleReducer(settings) {
      *  ${settings.name} reducer
      */
     case ${settings['constant_name']}:
-        return state;`;
+        return state;
+`;
 }
 
 function createSingleReducerImport(settings) {

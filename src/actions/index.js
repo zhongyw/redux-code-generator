@@ -7,8 +7,7 @@ function actionsController(settings) {
   settings.actions.forEach(action => {
       try {
           switch (action.type) {
-              case 'loadList':
-              case 'loadItem':
+              case 'api':
                   writeFile.createAPIActionImportFile(action, settings.output['action_file']);
                   return;
               case 'transaction':
@@ -29,8 +28,7 @@ function actionsController(settings) {
   settings.actions.forEach(action => {
     try {
       switch (action.type) {
-          case 'loadList':
-          case 'loadItem':
+          case 'api':
             writeFile.createAPIActionFile(action, settings.output['action_file']);
             return;
           case 'transaction':

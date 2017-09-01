@@ -262,7 +262,7 @@ function createSingleAction(settings) {
   return `/**
  *  ${settings.name} action
  */
-export function ${settings.method}(payload) {
+export function ${settings.method_base}(payload) {
   return {
     type: ${settings.constant_name},
     payload

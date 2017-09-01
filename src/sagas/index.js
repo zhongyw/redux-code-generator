@@ -4,13 +4,19 @@ var writeFile = require('./writeFile');
 function createSagaFile(settings, outputFile) {
   console.log('SAGAS GENERATED'.green);
 
-  writeFile.writeRawText(`import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects';\n`, settings.output['sagas_file']);
-  writeFile.writeRawText(`import { fromJS, Map } from 'immutable';\n`, settings.output['sagas_file']);
+  writeFile.writeRawText(`import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects';
+import { fromJS, Map } from 'immutable';
+import {
+  commonError
+} from 'containers/App/actions';
+import { API } from 'config/api';
+import request from 'utils/request';
+`, settings.output['sagas_file']);
   writeFile.writeRawText('import {\n', settings.output['sagas_file']);
   settings.actions.forEach(action => {
       try {
           switch (action.type) {
-              case 'loadList' || 'loadItem':
+              case 'api':
                   writeFile.createAPISagaImportConstantsFile(action, settings.output['sagas_file']);
                   return;
               case 'transsaga':
@@ -33,7 +39,7 @@ function createSagaFile(settings, outputFile) {
     settings.actions.forEach(action => {
         try {
             switch (action.type) {
-                case 'loadList' || 'loadItem':
+                case 'api':
                     writeFile.createAPISagaImportActionsFile(action, settings.output['sagas_file']);
                     return;
                 case 'transsaga':
@@ -50,16 +56,14 @@ function createSagaFile(settings, outputFile) {
         console.log(e.toString().red);
     }
 });
-    writeFile.writeRawText("\n} from './actions'\n\n", settings.output['sagas_file']);
-  writeFile.writeRawText("\nimport { API } from 'config/api';", settings.output['sagas_file']);
-  writeFile.writeRawText("\nimport request from 'utils/request';", settings.output['sagas_file']);
+  writeFile.writeRawText(`\n} from './actions';`, settings.output['sagas_file']);
+
 
 
   settings.actions.forEach(action => {
     try {
       switch (action.type) {
-      case 'loadList':
-      case 'loadItem':
+      case 'api':
         writeFile.createAPISagaFile(action, settings.output['sagas_file']);
         return;
       case 'transaction':
@@ -78,33 +82,39 @@ function createSagaFile(settings, outputFile) {
       console.log(e.toString().red);
     }
   });
-writeFile.writeRawText(`\nexport default [`, settings.output['sagas_file']);
+writeFile.writeRawText(`\nexport default [\n`, settings.output['sagas_file']);
+    let resultStr = '';
     settings.actions.forEach(action => {
         const methodBase = createMiddleMethodBase(action['method_base']);
         try {
             switch (action.type) {
-            case 'loadList':
-            case 'loadItem':
-                writeFile.writeRawText(`\n  watchLoad${methodBase},`, settings.output['sagas_file']);
-                return;
+            case 'api':
+              resultStr += `  /* 监控 ${action.name} action */
+  watchLoad${methodBase},\n`
+              return;
             case 'transaction':
             case 'crud':
-                writeFile.writeRawText(`\n  watchAdd${methodBase},`, settings.output['sagas_file']);
-                writeFile.writeRawText(`\n  watchUpdate${methodBase},`, settings.output['sagas_file']);
-                writeFile.writeRawText(`\n  watchDelete${methodBase},`, settings.output['sagas_file']);
-                return;
+              resultStr += `  /* 监控 添加${action.name} action */
+  watchAdd${methodBase},
+  /* 监控 修改${action.name} action */
+  watchUpdate${methodBase},
+  /* 监控 删除${action.name} action */
+  watchDelete${methodBase},\n`
+              return;
             case 'default':
             case 'single':
             default:
-                writeFile.writeRawText(`\n  watch${methodBase},`, settings.output['sagas_file']);
-                console.log('\n');
-                return;
+              resultStr += `/* 监控 ${action.name} action */
+  watch${methodBase},
+              `;
+              console.log('\n');
+              return;
             }
-            } catch (e) {
-                console.log(e.toString().red);
-            }
-            });
-    writeFile.writeRawText(`\n]`, settings.output['sagas_file']);
+        } catch (e) {
+            console.log(e.toString().red);
+        }
+    });
+    writeFile.writeRawText(`${resultStr}\n]`, settings.output['sagas_file']);
 
 }
 function createMiddleMethodBase(base) {
